@@ -45,9 +45,11 @@ def update():
         while answered == False:
             updateans = input("Update found! Do you want to update?(y/n) ")
             if updateans == "y":
+                print("Updating...")
                 os.system("curl -o update.py https://raw.githubusercontent.com/justanobody2107/public-projects/main/nekodl.py")
                 os.remove("nekodl.py")
                 os.rename("update.py", "nekodl.py")
+                print("Updated.")
                 answered = True
             elif updateans == "n":
                 print("Ok, won't update.")
