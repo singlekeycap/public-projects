@@ -98,7 +98,7 @@ def setup():
             asked = True
     asked = False
     while asked == False:
-        askupdate = input("Should I ask to update, if there's an update, when the script is run?")
+        askupdate = input("Should I ask to update, if there's an update, when the script is run?(y/n) ")
         if askupdate == "y":
             print("Will ask to update")
             asked = True
