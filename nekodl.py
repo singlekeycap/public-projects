@@ -26,7 +26,7 @@ except Exception:
 imgtype = "sfw"
 amount = 1
 apiurl = ["https://nekos.life/api/v2/img/neko"]
-version = "v1.1.3"
+version = "v1.2.0"
 updated = False
 
 #Update checker
@@ -47,10 +47,13 @@ def update():
             updateans = input("Update found! Do you want to update?(y/n) ")
             if updateans == "y":
                 print("Updating...")
-                os.system("curl -o update.py https://raw.githubusercontent.com/justanobody2107/public-projects/main/nekodl.py")
-                os.remove("nekodl.py")
-                os.rename("update.py", "nekodl.py")
-                print("Updated.")
+                os.system("curl -so update.py https://raw.githubusercontent.com/justanobody2107/public-projects/main/nekodl.py")
+                if os.path.exists("update.py):
+                    os.remove("nekodl.py")
+                    os.rename("update.py", "nekodl.py")
+                    print("Updated.")
+                else:
+                    print("\033[0;31m[ERROR]: Failed to update\033[0m"
                 answered = True
             elif updateans == "n":
                 print("Ok, won't update.")
@@ -82,7 +85,18 @@ def update():
                         askanswered = True
                 answered = True
     else:
-        print("No updates available.")         
+        print("No updates available.")   
+
+#Reinstall (will only run when --reinstall tag attached)
+def reinstall():
+    print("Reinstalling")
+    os.system("curl -so update.py https://raw.githubusercontent.com/justanobody2107/public-projects/main/nekodl.py")
+    if os.path.exists("update.py):
+        os.remove("nekodl.py")
+        os.rename("update.py", "nekodl.py")
+        print("Reinstalled.")
+    else:
+        print("\033[0;31m[ERROR]: Failed to reinstall\033[0m"
 
 #Setup (will only run when --config tag attached)
 def setup():
@@ -106,7 +120,25 @@ def setup():
         elif askupdate == "n":
             print("Will never ask to update again")
             asked = True
-    writetojson = {'savedir':savedir,'asktozip':asktozip, 'askupdate':askupdate}
+    asked = False
+    while asked == False:
+        defaultsfw = input("What is your preferred default sfw status?(s/n/g) ")
+        if defaultsfw == "s":
+            print("Will default to sfw.")
+            asked = True
+        elif defaultsfw == "n":
+            print("Will default to nsfw.")
+            asked = True
+        elif defaultsfw == "g":
+            print("Will default to gif.")
+            asked = True
+    asked = False
+    while asked == False:
+        defaultamount = int(input("What is your preferred default sfw status?(s/n/g) "))
+        if defaultamount != None:
+            print("Will default to "+str(defaultamount)+" images")
+            asked = True
+    writetojson = {'savedir':savedir,'asktozip':asktozip, 'askupdate':askupdate, 'sfw':defaultsfw, 'amount':defaultamount}
     with open('config.json', 'w') as f:
         json.dump(writetojson, f, indent=2)
 
@@ -123,6 +155,19 @@ if os.path.exists("config.json") == False:
         elif createsetup == "n":
             print("It's important to create a config file. Please rethink your decision")
 
+#Config parser
+with open('config.json') as config:
+    data = json.load(config)
+    try:
+        zip = data['asktozip']
+        dir = data['savedir']
+        chkupd = data['askupdate']
+        imgtype = data['sfw']
+        amount = data['amount']
+    except Exception:
+        print("Config is outdated, starting configuration.")
+        setup()
+
 #Check for config arg
 if "--config" in args or "-c" in args:
     setup()
@@ -131,13 +176,14 @@ if "--config" in args or "-c" in args:
 #Check for help arg
 if "--help" in args or "-h" in args:
     print("NekoDL "+version+" - JustANobody#2107")
-    print("--help   | -h      Displays this message")
-    print("--config | -c      Asks for configuration")
-    print("--nsfw   | -n      Downloads nsfw image")
-    print("--sfw    | -s      Downloads sfw image (default)")
-    print("--gif    | -g      Downloads gif image")
-    print("--batch  | -b      Downloads batch of images")
-    print("--update | -u      Checks for updates")
+    print("--help      | -h      Displays this message")
+    print("--config    | -c      Asks for configuration")
+    print("--nsfw      | -n      Downloads nsfw image")
+    print("--sfw       | -s      Downloads sfw image (default)")
+    print("--gif       | -g      Downloads gif image")
+    print("--batch     | -b      Downloads batch of images")
+    print("--update    | -u      Checks for updates")
+    print("--reinstall | -r      Reinstalls script")
     imgtype = None
 
 #Check for nsfw
@@ -168,12 +214,11 @@ if "--update" in args or "-u" in args:
     updated = True
     imgtype = None
 
-#Config parser
-with open('config.json') as config:
-    data = json.load(config)
-    zip = data['asktozip']
-    dir = data['savedir']
-    chkupd = data['askupdate']
+#Check for reinstall
+if "--reinstall" in args or "-r" in args:
+    reinstall()
+    updated = True
+    imgtype = None
 
 #Make/set directory
 pathsfw = os.path.join(dir, 'sfw')
