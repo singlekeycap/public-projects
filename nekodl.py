@@ -72,7 +72,6 @@ def update():
                         with open('config.json', 'w') as f:
                             json.dump(writetojson, f, indent=2)
                         askanswered = True
-                        askanswered = True
                     elif askans == "n":
                         print("Ok, won't ask next time.")
                         with open('config.json') as f:
