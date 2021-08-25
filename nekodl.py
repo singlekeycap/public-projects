@@ -96,7 +96,7 @@ def reinstall():
         os.rename("update.py", "nekodl.py")
         print("Reinstalled.")
     else:
-        print("\033[0;31m[ERROR]: Failed to reinstall\033[0m"
+        print("\033[0;31m[ERROR]: Failed to reinstall\033[0m")
 
 #Setup (will only run when --config tag attached)
 def setup():
@@ -134,7 +134,7 @@ def setup():
             asked = True
     asked = False
     while asked == False:
-        defaultamount = int(input("What is your preferred default sfw status?(s/n/g) "))
+        defaultamount = int(input("What is your preferred default image count? "))
         if defaultamount != None:
             print("Will default to "+str(defaultamount)+" images")
             asked = True
@@ -157,16 +157,26 @@ if os.path.exists("config.json") == False:
 
 #Config parser
 with open('config.json') as config:
-    data = json.load(config)
-    try:
-        zip = data['asktozip']
-        dir = data['savedir']
-        chkupd = data['askupdate']
-        imgtype = data['sfw']
-        amount = data['amount']
-    except Exception:
-        print("Config is outdated, starting configuration.")
-        setup()
+    works = False
+    while works == False:
+        data = json.load(config)
+        try:
+            zip = data['asktozip']
+            dir = data['savedir']
+            chkupd = data['askupdate']
+            defaulttype = data['sfw']
+            if defaulttype == "n":
+                imgtype = "nsfw"
+            elif defaulttype == "s":
+                imgtype == "sfw"
+            elif defaulttype == "g":
+                imgtype == "gif"
+            amount = data['amount']
+            works = True
+        except Exception:
+            print("Config is outdated, starting configuration.")
+            setup()
+
 
 #Check for config arg
 if "--config" in args or "-c" in args:
