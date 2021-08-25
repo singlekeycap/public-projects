@@ -91,7 +91,7 @@ def update():
 def reinstall():
     print("Reinstalling")
     os.system("curl -so update.py https://raw.githubusercontent.com/justanobody2107/public-projects/main/nekodl.py")
-    if os.path.exists("update.py):
+    if os.path.exists("update.py"):
         os.remove("nekodl.py")
         os.rename("update.py", "nekodl.py")
         print("Reinstalled.")
