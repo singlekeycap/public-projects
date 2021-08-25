@@ -26,7 +26,7 @@ except Exception:
 imgtype = "sfw"
 amount = 1
 apiurl = ["https://nekos.life/api/v2/img/neko"]
-version = "v1.1.0"
+version = "v1.1.2"
 
 #Update checker
 def update():
@@ -194,7 +194,13 @@ if imgtype != None:
     pbar = tqdm(total=amount, ascii = True, colour="green")
     while i <= amount:
         randapiurl = random.choice(apiurl)
-        randapicontent = requests.get(randapiurl)
+        apiworks = False
+        while apiworks == False:
+            try:
+                randapicontent = requests.get(randapiurl)
+                apiworks = True
+            except Exception:
+                randapiurl = random.choice(apiurl)
         data = json.loads(randapicontent.content)
         url = data['url']
         if url.find('/'):
