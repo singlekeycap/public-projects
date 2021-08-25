@@ -26,7 +26,8 @@ except Exception:
 imgtype = "sfw"
 amount = 1
 apiurl = ["https://nekos.life/api/v2/img/neko"]
-version = "v1.1.2"
+version = "v1.1.3"
+updated = False
 
 #Update checker
 def update():
