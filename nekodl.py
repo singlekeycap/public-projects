@@ -4,7 +4,6 @@ import json
 import sys
 import random
 import re
-import time
 
 #Check for dependencies
 try:
@@ -27,9 +26,9 @@ except Exception:
 imgtype = "sfw"
 amount = 1
 apiurl = ["https://nekos.life/api/v2/img/neko"]
-version = "v1.1.1"
+version = "v1.1.0"
 
-#Update checker (will only run when --update tag attached)
+#Update checker
 def update():
     print("Checking for updates...")
     newversion = str(requests.get("https://raw.githubusercontent.com/justanobody2107/public-projects/main/latestversion.txt").content)
@@ -48,12 +47,9 @@ def update():
             if updateans == "y":
                 print("Updating...")
                 os.system("curl -o update.py https://raw.githubusercontent.com/justanobody2107/public-projects/main/nekodl.py")
-                if os.path.exists("update.py"):
-                    os.remove("nekodl.py")
-                    os.rename("update.py", "nekodl.py")
-                    print("Updated.")
-                else:
-                    print("\033[0;31m[ERROR] Failed to update!\033[0m")
+                os.remove("nekodl.py")
+                os.rename("update.py", "nekodl.py")
+                print("Updated.")
                 answered = True
             elif updateans == "n":
                 print("Ok, won't update.")
@@ -168,6 +164,7 @@ if "--batch" in args or "-b" in args:
 #Check for update
 if "--update" in args or "-u" in args:
     update()
+    updated = True
     imgtype = None
 
 #Config parser
@@ -197,13 +194,7 @@ if imgtype != None:
     pbar = tqdm(total=amount, ascii = True, colour="green")
     while i <= amount:
         randapiurl = random.choice(apiurl)
-        apiworks = False
-        while apiworks == False:
-            try:
-                randapicontent = requests.get(randapiurl)
-                apiworks = True
-            except Exception:
-                randapiurl = random.choice(apiurl)
+        randapicontent = requests.get(randapiurl)
         data = json.loads(randapicontent.content)
         url = data['url']
         if url.find('/'):
@@ -262,5 +253,5 @@ if zip == "y" and imgtype != None:
             zipped = True
 
 #Update
-if chkupd == "y":
+if chkupd == "y" and updated == True:
     update()
