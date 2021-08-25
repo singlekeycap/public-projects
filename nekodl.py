@@ -4,6 +4,7 @@ import json
 import sys
 import random
 import re
+import time
 
 #Check for dependencies
 try:
@@ -26,9 +27,9 @@ except Exception:
 imgtype = "sfw"
 amount = 1
 apiurl = ["https://nekos.life/api/v2/img/neko"]
-version = "v1.1.0"
+version = "v1.1.1"
 
-#Update checker
+#Update checker (will only run when --update tag attached)
 def update():
     print("Checking for updates...")
     newversion = str(requests.get("https://raw.githubusercontent.com/justanobody2107/public-projects/main/latestversion.txt").content)
@@ -47,9 +48,12 @@ def update():
             if updateans == "y":
                 print("Updating...")
                 os.system("curl -o update.py https://raw.githubusercontent.com/justanobody2107/public-projects/main/nekodl.py")
-                os.remove("nekodl.py")
-                os.rename("update.py", "nekodl.py")
-                print("Updated.")
+                if os.path.exists("update.py"):
+                    os.remove("nekodl.py")
+                    os.rename("update.py", "nekodl.py")
+                    print("Updated.")
+                else:
+                    print("\033[0;31m[ERROR] Failed to update!\033[0m")
                 answered = True
             elif updateans == "n":
                 print("Ok, won't update.")
@@ -193,7 +197,13 @@ if imgtype != None:
     pbar = tqdm(total=amount, ascii = True, colour="green")
     while i <= amount:
         randapiurl = random.choice(apiurl)
-        randapicontent = requests.get(randapiurl)
+        apiworks = False
+        while apiworks == False:
+            try:
+                randapicontent = requests.get(randapiurl)
+                apiworks = True
+            except Exception:
+                randapiurl = random.choice(apiurl)
         data = json.loads(randapicontent.content)
         url = data['url']
         if url.find('/'):
