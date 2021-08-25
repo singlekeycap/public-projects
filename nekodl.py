@@ -259,5 +259,5 @@ if zip == "y" and imgtype != None:
             zipped = True
 
 #Update
-if chkupd == "y" and updated == True:
+if chkupd == "y" and updated == False:
     update()
