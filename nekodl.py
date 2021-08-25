@@ -1,9 +1,5 @@
-#Import system/json
-import os
-import json
-import sys
-import random
-import re
+#Import dependencies
+import os, json, sys, random, re, time
 
 #Check for dependencies
 try:
@@ -26,7 +22,7 @@ except Exception:
 imgtype = "sfw"
 amount = 1
 apiurl = ["https://nekos.life/api/v2/img/neko"]
-version = "v1.2.0"
+version = "v1.2.1"
 updated = False
 
 #Update checker
@@ -100,6 +96,8 @@ def reinstall():
 
 #Setup (will only run when --config tag attached)
 def setup():
+    if os.path.exists("config.json"):
+        os.remove("config.json")
     savedir = input("Where should I save the nekos? ")
     print("Saving to "+savedir)
     asked = False
@@ -175,7 +173,9 @@ with open('config.json') as config:
             works = True
         except Exception:
             print("Config is outdated, starting configuration.")
+            config.close()
             setup()
+            config = open('config.json')
 
 
 #Check for config arg
