@@ -54,7 +54,7 @@ def update():
                     print("Updated.")
                     answered = True
                 else:
-                    print("\033[0;31m[ERROR]: Failed to update\033[0m"
+                    print("\033[0;31m[ERROR]: Failed to update\033[0m")
                     answered = True
             elif updateans == "n":
                 print("Ok, won't update.")
