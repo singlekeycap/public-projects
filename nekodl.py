@@ -52,9 +52,10 @@ def update():
                     os.remove("nekodl.py")
                     os.rename("update.py", "nekodl.py")
                     print("Updated.")
+                    answered = True
                 else:
                     print("\033[0;31m[ERROR]: Failed to update\033[0m"
-                answered = True
+                    answered = True
             elif updateans == "n":
                 print("Ok, won't update.")
                 askanswered = False
