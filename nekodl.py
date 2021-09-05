@@ -22,7 +22,7 @@ except Exception:
 imgtype = "sfw"
 amount = 1
 apiurl = ["https://nekos.life/api/v2/img/neko"]
-version = "v1.2.3"
+version = "v1.2.4"
 updated = False
 
 #Update checker
@@ -322,65 +322,98 @@ if imgtype != None:
                 with open(nsfwurlmap) as f:
                     file = str(f.read())
                     urls = file.split("\n")
-                if amount > len(urls)-1:
+                if badfile == len(urls)-1:
+                    pbar.close()
+                    print("\033[0;31m[ERROR]: Some or all of the pictures were duplicates\033[0m")
+                    badfile = 0
+                    break
+                if amount-badfile > len(urls)-1:
                     amount = len(urls)-1
                     pbar.close()
                     print("Updating count...")
                     pbar = tqdm(total=amount, ascii = True, colour="green")
-                if urls[i].find('/'):
-                    imagename = urls[i].rsplit('/', 1)[1]
-                url = urls[i]
-                imagepath = os.path.join(pathnsfw,imagename)
-                if not os.path.exists(imagepath):
-                    os.system("curl -so "+pathnsfw+"/"+imagename+" "+url)
-                    i = i + 1
-                    pbar.update(1)
-                else:
-                    badfile = badfile+1
-                    i = i + 1
+                try:
+                    if urls[i].find('/'):
+                        imagename = urls[i].rsplit('/', 1)[1]
+                    url = urls[i]
+                    imagepath = os.path.join(pathnsfw,imagename)
+                    if not os.path.exists(imagepath):
+                        os.system("curl -so "+pathnsfw+"/"+imagename+" "+url)
+                        i = i + 1
+                        pbar.update(1)
+                    else:
+                        badfile = badfile + 1
+                        i = i + 1
+                        amount = amount + 1
+                except Exception:
+                    pbar.close()
+                    print("\033[0;31m[ERROR]: Some or all of the pictures were duplicates\033[0m")
+                    badfile = 0
+                    break
             elif imgtype == "sfw":
                 with open(sfwurlmap) as f:
                     file = str(f.read())
                     urls = file.split("\n")
-                if amount > len(urls)-1:
+                if badfile == len(urls)-1:
+                    pbar.close()
+                    print("\033[0;31m[ERROR]: Some or all of the pictures were duplicates\033[0m")
+                    badfile = 0
+                    break
+                if amount-badfile > len(urls)-1:
                     amount = len(urls)-1
                     pbar.close()
                     print("Updating count...")
                     pbar = tqdm(total=amount, ascii = True, colour="green")
-                if urls[i].find('/'):
-                    imagename = urls[i].rsplit('/', 1)[1]
-                url = urls[i]
-                imagepath = os.path.join(pathsfw,imagename)
-                if not os.path.exists(imagepath):
-                    os.system("curl -so "+pathsfw+"/"+imagename+" "+url)
-                    i = i + 1
-                    pbar.update(1)
-                else:
-                    badfile = badfile+1
-                    i = i + 1
+                try:
+                    if urls[i].find('/'):
+                        imagename = urls[i].rsplit('/', 1)[1]
+                    url = urls[i]
+                    imagepath = os.path.join(pathsfw,imagename)
+                    if not os.path.exists(imagepath):
+                        os.system("curl -so "+pathsfw+"/"+imagename+" "+url)
+                        i = i + 1
+                        pbar.update(1)
+                    else:
+                        badfile = badfile + 1
+                        i = i + 1
+                        amount = amount + 1
+                except Exception:
+                    pbar.close()
+                    print("\033[0;31m[ERROR]: Some or all of the pictures were duplicates\033[0m")
+                    badfile = 0
+                    break
             elif imgtype == "gif":
                 with open(gifurlmap) as f:
                     file = str(f.read())
                     urls = file.split("\n")
-                if amount > len(urls)-1:
+                if badfile == len(urls)-1:
+                    pbar.close()
+                    print("\033[0;31m[ERROR]: Some or all of the pictures were duplicates\033[0m")
+                    badfile = 0
+                    break
+                if amount-badfile > len(urls)-1:
                     amount = len(urls)-1
                     pbar.close()
                     print("Updating count...")
                     pbar = tqdm(total=amount, ascii = True, colour="green")
-                if urls[i].find('/'):
-                    imagename = urls[i].rsplit('/', 1)[1]
-                url = urls[i]
-                imagepath = os.path.join(pathgif,imagename)
-                if not os.path.exists(imagepath):
-                    os.system("curl -so "+pathgif+"/"+imagename+" "+url)
-                    i = i + 1
-                    pbar.update(1)
-                else:
-                    badfile = badfile+1
-                    i = i + 1
-        if badfile == amount:
-            pbar.close()
-            print("\033[0;31m[ERROR]: Some or all of the pictures were duplicates\033[0m")
+                try:
+                    if urls[i].find('/'):
+                        imagename = urls[i].rsplit('/', 1)[1]
+                    url = urls[i]
+                    imagepath = os.path.join(pathgif,imagename)
+                    if not os.path.exists(imagepath):
+                        os.system("curl -so "+pathgif+"/"+imagename+" "+url)
+                        i = i + 1
+                        pbar.update(1)
+                    else:
+                        badfile = badfile + 1
+                        i = i + 1
+                        amount = amount + 1
+                except Exception:
+                    pbar.close()
+                    print("\033[0;31m[ERROR]: Some or all of the pictures were duplicates\033[0m")
+                    badfile = 0
+                    break
     pbar.close()
 
 #Zip script
