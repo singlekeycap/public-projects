@@ -22,7 +22,7 @@ except Exception:
 imgtype = "sfw"
 amount = 1
 apiurl = ["https://nekos.life/api/v2/img/neko"]
-version = "v1.2.1"
+version = "v1.2.2"
 updated = False
 
 #Update checker
@@ -59,24 +59,24 @@ def update():
                     askans = input("Ask to update next time?(y/n) ")
                     if askans == "y":
                         print("Ok, will ask again next time.")
-                        with open('config.json') as f:
+                        with open(configfile) as f:
                             data = json.load(f)
                             savedir = data['savedir']
                             asktozip = data['asktozip']
                             askupdate = "y"
                         writetojson = {'savedir':savedir,'asktozip':asktozip, 'askupdate':askupdate}
-                        with open('config.json', 'w') as f:
+                        with open(configfile, 'w') as f:
                             json.dump(writetojson, f, indent=2)
                         askanswered = True
                     elif askans == "n":
                         print("Ok, won't ask next time.")
-                        with open('config.json') as f:
+                        with open(configfile) as f:
                             data = json.load(f)
                             savedir = data['savedir']
                             asktozip = data['asktozip']
                             askupdate = "n"
                         writetojson = {'savedir':savedir,'asktozip':asktozip, 'askupdate':askupdate}
-                        with open('config.json', 'w') as f:
+                        with open(configfile, 'w') as f:
                             json.dump(writetojson, f, indent=2)
                         askanswered = True
                 answered = True
@@ -96,8 +96,8 @@ def reinstall():
 
 #Setup (will only run when --config tag attached)
 def setup():
-    if os.path.exists("config.json"):
-        os.remove("config.json")
+    if os.path.exists(configfile):
+        os.remove(configfile)
     savedir = input("Where should I save the nekos? ")
     print("Saving to "+savedir)
     asked = False
@@ -137,12 +137,18 @@ def setup():
             print("Will default to "+str(defaultamount)+" images")
             asked = True
     writetojson = {'savedir':savedir,'asktozip':asktozip, 'askupdate':askupdate, 'sfw':defaultsfw, 'amount':defaultamount}
-    with open('config.json', 'w') as f:
+    with open(configfile, 'w') as f:
         json.dump(writetojson, f, indent=2)
 
 #Check for setups and save args
 args = sys.argv[1:]
-if os.path.exists("config.json") == False:
+if not os.path.isdir("nekodlconfig"):
+    os.makedirs("nekodlconfig")
+configdir = os.path.join(os.getcwd(), "nekodlconfig")
+configfile = os.path.join(configdir, "config.json")
+if os.path.exists("config.json"):
+    os.rename("config.json", configfile)
+if not os.path.exists(configfile):
     askedsetup = False
     while askedsetup == False:
         createsetup = input("Want to create a config (this appears on first time run)?(y/n) ")
@@ -154,7 +160,7 @@ if os.path.exists("config.json") == False:
             print("It's important to create a config file. Please rethink your decision")
 
 #Config parser
-with open('config.json') as config:
+with open(configfile) as config:
     works = False
     while works == False:
         data = json.load(config)
@@ -175,7 +181,7 @@ with open('config.json') as config:
             print("Config is outdated, starting configuration.")
             config.close()
             setup()
-            config = open('config.json')
+            config = open(configfile)
 
 
 #Check for config arg
@@ -192,6 +198,7 @@ if "--help" in args or "-h" in args:
     print("--sfw       | -s      Downloads sfw image (default)")
     print("--gif       | -g      Downloads gif image")
     print("--batch     | -b      Downloads batch of images")
+    print("--quick     | -q      Downloads/uses url map (quicker)")
     print("--update    | -u      Checks for updates")
     print("--reinstall | -r      Reinstalls script")
     imgtype = None
@@ -217,6 +224,24 @@ if imgtype == "gif":
 #Check for batch download
 if "--batch" in args or "-b" in args:
     amount = int(input("How many images do you want to save? "))
+
+#Check for urlmap tag
+useurlmap = False
+if "--quick" in args or "-q" in args:
+    useurlmap = True
+    print("Using url maps.")
+    
+#Check for urlmaps
+if useurlmap == True:
+    sfwurlmap = os.path.join(configdir, "sfw.txt")
+    nsfwurlmap = os.path.join(configdir, "nsfw.txt")
+    gifurlmap = os.path.join(configdir, "gif.txt")
+    if not os.path.exists(sfwurlmap):
+        os.system("curl -so "+sfwurlmap+" "+"https://raw.githubusercontent.com/justanobody2107/public-projects/main/sfw.txt")
+    if not os.path.exists(nsfwurlmap):
+        os.system("curl -so "+nsfwurlmap+" "+"https://raw.githubusercontent.com/justanobody2107/public-projects/main/nsfw.txt")
+    if not os.path.exists(gifurlmap):
+        os.system("curl -so "+gifurlmap+" "+"https://raw.githubusercontent.com/justanobody2107/public-projects/main/gif.txt")
 
 #Check for update
 if "--update" in args or "-u" in args:
@@ -244,51 +269,118 @@ if not os.path.isdir(pathgif):
     os.makedirs(pathgif)
 
 #Download script
-i = 1
+i = 0
 badfile = 0
 if imgtype != None:
     pbar = tqdm(total=amount, ascii = True, colour="green")
-    while i <= amount:
-        randapiurl = random.choice(apiurl)
-        apiworks = False
-        while apiworks == False:
-            try:
-                randapicontent = requests.get(randapiurl)
-                apiworks = True
-            except Exception:
-                randapiurl = random.choice(apiurl)
-        data = json.loads(randapicontent.content)
-        url = data['url']
-        if url.find('/'):
-            imagename = url.rsplit('/', 1)[1]
-        if imgtype == "nsfw":
-            imagepath = os.path.join(pathnsfw,imagename)
-            if not os.path.exists(imagepath):
-                os.system("curl -so "+pathnsfw+"/"+imagename+" "+url)
-                i = i + 1
-                pbar.update(1)
-            else:
-                badfile = badfile+1
-        elif imgtype == "sfw":
-            imagepath = os.path.join(pathsfw,imagename)
-            if not os.path.exists(imagepath):
-                os.system("curl -so "+pathsfw+"/"+imagename+" "+url)
-                i = i + 1
-                pbar.update(1)
-            else:
-                badfile = badfile+1
-        elif imgtype == "gif":
-            imagepath = os.path.join(pathgif,imagename)
-            if not os.path.exists(imagepath):
-                os.system("curl -so "+pathgif+"/"+imagename+" "+url)
-                i = i + 1
-                pbar.update(1)
-            else:
-                badfile = badfile+1
-        if badfile == amount:
-            print("\033[0;31m[ERROR]: All of the pictures were duplicates or had bad formatting\033[0m")
-            i = amount
-            badfile = 0
+    if useurlmap == False:
+        while i < amount:
+            if badfile == amount:
+                pbar.close()
+                print("\033[0;31m[ERROR]: All of the pictures were duplicates or had bad formatting\033[0m")
+                badfile = 0
+                break
+            randapiurl = random.choice(apiurl)
+            apiworks = False
+            while apiworks == False:
+                try:
+                    randapicontent = requests.get(randapiurl)
+                    apiworks = True
+                except Exception:
+                    randapiurl = random.choice(apiurl)
+            data = json.loads(randapicontent.content)
+            url = data['url']
+            if url.find('/'):
+                imagename = url.rsplit('/', 1)[1]
+            if imgtype == "nsfw":
+                imagepath = os.path.join(pathnsfw,imagename)
+                if not os.path.exists(imagepath):
+                    os.system("curl -so "+pathnsfw+"/"+imagename+" "+url)
+                    i = i + 1
+                    pbar.update(1)
+                else:
+                    badfile = badfile+1
+            elif imgtype == "sfw":
+                imagepath = os.path.join(pathsfw,imagename)
+                if not os.path.exists(imagepath):
+                    os.system("curl -so "+pathsfw+"/"+imagename+" "+url)
+                    i = i + 1
+                    pbar.update(1)
+                else:
+                    badfile = badfile+1
+            elif imgtype == "gif":
+                imagepath = os.path.join(pathgif,imagename)
+                if not os.path.exists(imagepath):
+                    os.system("curl -so "+pathgif+"/"+imagename+" "+url)
+                    i = i + 1
+                    pbar.update(1)
+                else:
+                    badfile = badfile+1
+    else:
+        while i < amount:
+            if badfile == amount:
+                pbar.close()
+                print("\033[0;31m[ERROR]: All of the pictures were duplicates or had bad formatting\033[0m")
+                i = amount
+                badfile = 0
+                break
+            if imgtype == "nsfw":
+                with open(nsfwurlmap) as f:
+                    file = str(f.read())
+                    urls = file.split("\n")
+                if amount > len(urls)-1:
+                    amount = len(urls)-1
+                    pbar.close()
+                    print("Updating count...")
+                    pbar = tqdm(total=amount, ascii = True, colour="green")
+                if urls[i].find('/'):
+                    imagename = urls[i].rsplit('/', 1)[1]
+                url = urls[i]
+                imagepath = os.path.join(pathnsfw,imagename)
+                if not os.path.exists(imagepath):
+                    os.system("curl -so "+pathnsfw+"/"+imagename+" "+url)
+                    i = i + 1
+                    pbar.update(1)
+                else:
+                    badfile = badfile+1
+            elif imgtype == "sfw":
+                with open(sfwurlmap) as f:
+                    file = str(f.read())
+                    urls = file.split("\n")
+                if amount > len(urls)-1:
+                    amount = len(urls)-1
+                    pbar.close()
+                    print("Updating count...")
+                    pbar = tqdm(total=amount, ascii = True, colour="green")
+                if urls[i].find('/'):
+                    imagename = urls[i].rsplit('/', 1)[1]
+                url = urls[i]
+                imagepath = os.path.join(pathsfw,imagename)
+                if not os.path.exists(imagepath):
+                    os.system("curl -so "+pathsfw+"/"+imagename+" "+url)
+                    i = i + 1
+                    pbar.update(1)
+                else:
+                    badfile = badfile+1
+            elif imgtype == "gif":
+                with open(gifurlmap) as f:
+                    file = str(f.read())
+                    urls = file.split("\n")
+                if amount > len(urls)-1:
+                    amount = len(urls)-1
+                    pbar.close()
+                    print("Updating count...")
+                    pbar = tqdm(total=amount, ascii = True, colour="green")
+                if urls[i].find('/'):
+                    imagename = urls[i].rsplit('/', 1)[1]
+                url = urls[i]
+                imagepath = os.path.join(pathgif,imagename)
+                if not os.path.exists(imagepath):
+                    os.system("curl -so "+pathgif+"/"+imagename+" "+url)
+                    i = i + 1
+                    pbar.update(1)
+                else:
+                    badfile = badfile+1
     pbar.close()
 
 #Zip script
