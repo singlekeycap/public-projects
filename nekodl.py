@@ -22,7 +22,7 @@ except Exception:
 imgtype = "sfw"
 amount = 1
 apiurl = ["https://nekos.life/api/v2/img/neko"]
-version = "v1.2.2"
+version = "v1.2.3"
 updated = False
 
 #Update checker
@@ -318,12 +318,6 @@ if imgtype != None:
                     badfile = badfile+1
     else:
         while i < amount:
-            if badfile == amount:
-                pbar.close()
-                print("\033[0;31m[ERROR]: All of the pictures were duplicates or had bad formatting\033[0m")
-                i = amount
-                badfile = 0
-                break
             if imgtype == "nsfw":
                 with open(nsfwurlmap) as f:
                     file = str(f.read())
@@ -343,6 +337,7 @@ if imgtype != None:
                     pbar.update(1)
                 else:
                     badfile = badfile+1
+                    i = i + 1
             elif imgtype == "sfw":
                 with open(sfwurlmap) as f:
                     file = str(f.read())
@@ -362,6 +357,7 @@ if imgtype != None:
                     pbar.update(1)
                 else:
                     badfile = badfile+1
+                    i = i + 1
             elif imgtype == "gif":
                 with open(gifurlmap) as f:
                     file = str(f.read())
@@ -381,6 +377,10 @@ if imgtype != None:
                     pbar.update(1)
                 else:
                     badfile = badfile+1
+                    i = i + 1
+        if badfile == amount:
+            pbar.close()
+            print("\033[0;31m[ERROR]: Some or all of the pictures were duplicates\033[0m")
     pbar.close()
 
 #Zip script
