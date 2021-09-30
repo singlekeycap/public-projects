@@ -4,9 +4,9 @@
   "sourceURL": "https://raw.githubusercontent.com/justanobody2107/public-projects/main/apps.json",
   "apps": [
     {
-      "name": "AltStore",
-      "bundleIdentifier": "com.JustANobody2107.AltStore.Beta",
-      "developerName": "JustANobody2107",
+      "name": "AltStore Beta",
+      "bundleIdentifier": "com.rileytestut.AltStore.Beta",
+      "developerName": "Riley Testut",
       "subtitle": "An alternative App Store for iOS.",
       "version": "1.5b",
       "versionDate": "2021-09-16T13:00:00-07:00",
@@ -16,7 +16,7 @@
       "iconURL": "https://user-images.githubusercontent.com/705880/65270980-1eb96f80-dad1-11e9-9367-78ccd25ceb02.png",
       "tintColor": "018084",
       "size": 4763126,
-      "beta": true,
+      "beta": false,
       "screenshotURLs": [
         "https://user-images.githubusercontent.com/705880/78942028-acf54300-7a6d-11ea-821c-5bb7a9b3e73a.PNG",
         "https://user-images.githubusercontent.com/705880/78942222-0fe6da00-7a6e-11ea-9f2a-dda16157583c.PNG",
@@ -35,8 +35,8 @@
     },
     {
       "name": "Delta Beta",
-      "bundleIdentifier": "com.JustANobody2107.Delta.Beta",
-      "developerName": "JustANobody2107",
+      "bundleIdentifier": "com.rileytestut.Delta.Beta",
+      "developerName": "Riley Testut",
       "subtitle": "Classic games in your pocket.",
       "version": "1.3rc1",
       "versionDate": "2021-03-22T14:00:00-07:00",
@@ -46,7 +46,7 @@
       "iconURL": "https://user-images.githubusercontent.com/705880/63391976-4d311700-c37a-11e9-91a8-4fb0c454413d.png",
       "tintColor": "8A28F7",
       "size": 19625267,
-      "beta": true,
+      "beta": false,
       "permissions": [
         {
           "type": "photos",
@@ -63,9 +63,9 @@
     },
     {
       "name": "Clip Beta",
-      "bundleIdentifier": "com.JustANobody2107.Clip.Beta",
+      "bundleIdentifier": "com.rileytestut.Clip.Beta",
       "subtitle": "Manage your clipboard history with ease.",
-      "developerName": "JustANobody2107",
+      "developerName": "Riley Testut",
       "version": "1.1b1",
       "versionDate": "2020-06-17T12:30:00-07:00",
       "versionDescription": "This update adds a Custom Keyboard app extension for quick access to clippings when editing text.\n\nTo enable the keyboard, go to Settings > General > Keyboard > Keyboards > Add New Keyboard... and add \"ClipBoard\". Once added, make sure to then enable \"Allow Full Access\" for ClipBoard so it can access your clippings.",
@@ -74,7 +74,7 @@
       "iconURL": "https://user-images.githubusercontent.com/705880/63391981-5326f800-c37a-11e9-99d8-760fd06bb601.png",
       "tintColor": "EC008C",
       "size": 462771,
-      "beta": true,
+      "beta": false,
       "permissions": [
         {
           "type": "background-audio",
