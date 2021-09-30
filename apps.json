@@ -16,7 +16,7 @@
       "iconURL": "https://user-images.githubusercontent.com/705880/65270980-1eb96f80-dad1-11e9-9367-78ccd25ceb02.png",
       "tintColor": "018084",
       "size": 4763126,
-      "beta": true,
+      "beta": false,
       "screenshotURLs": [
         "https://user-images.githubusercontent.com/705880/78942028-acf54300-7a6d-11ea-821c-5bb7a9b3e73a.PNG",
         "https://user-images.githubusercontent.com/705880/78942222-0fe6da00-7a6e-11ea-9f2a-dda16157583c.PNG",
@@ -46,7 +46,7 @@
       "iconURL": "https://user-images.githubusercontent.com/705880/63391976-4d311700-c37a-11e9-91a8-4fb0c454413d.png",
       "tintColor": "8A28F7",
       "size": 19625267,
-      "beta": true,
+      "beta": false,
       "permissions": [
         {
           "type": "photos",
@@ -74,7 +74,7 @@
       "iconURL": "https://user-images.githubusercontent.com/705880/63391981-5326f800-c37a-11e9-99d8-760fd06bb601.png",
       "tintColor": "EC008C",
       "size": 462771,
-      "beta": true,
+      "beta": false,
       "permissions": [
         {
           "type": "background-audio",
