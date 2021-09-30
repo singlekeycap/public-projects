@@ -4,7 +4,7 @@
   "sourceURL": "https://raw.githubusercontent.com/justanobody2107/public-projects/main/apps.json",
   "apps": [
     {
-      "name": "AltStore",
+      "name": "AltStore Beta",
       "bundleIdentifier": "com.rileytestut.AltStore.Beta",
       "developerName": "Riley Testut",
       "subtitle": "An alternative App Store for iOS.",
@@ -34,7 +34,7 @@
       ]
     },
     {
-      "name": "Delta",
+      "name": "Delta Beta",
       "bundleIdentifier": "com.rileytestut.Delta.Beta",
       "developerName": "Riley Testut",
       "subtitle": "Classic games in your pocket.",
@@ -62,7 +62,7 @@
       ]
     },
     {
-      "name": "Clip",
+      "name": "Clip Beta",
       "bundleIdentifier": "com.rileytestut.Clip.Beta",
       "subtitle": "Manage your clipboard history with ease.",
       "developerName": "Riley Testut",
