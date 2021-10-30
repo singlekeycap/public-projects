@@ -22,7 +22,7 @@ except Exception:
 imgtype = "sfw"
 amount = 1
 apiurl = ["https://nekos.life/api/v2/img/neko"]
-version = "v1.2.4"
+version = "v1.2.5"
 updated = False
 
 #Update checker
@@ -37,9 +37,8 @@ def update():
     newnum1 = newver[0]
     newnum2 = newver[1]
     newnum3 = newver[2]
-    answered = False
     if num1 < newnum1 or num2 < newnum2 or num3 < newnum3:
-        while answered == False:
+        while True:
             updateans = input("Update found! Do you want to update?(y/n) ")
             if updateans == "y":
                 print("Updating...")
@@ -48,14 +47,13 @@ def update():
                     os.remove("nekodl.py")
                     os.rename("update.py", "nekodl.py")
                     print("Updated.")
-                    answered = True
+                    break
                 else:
                     print("\033[0;31m[ERROR]: Failed to update\033[0m")
-                    answered = True
+                    break
             elif updateans == "n":
                 print("Ok, won't update.")
-                askanswered = False
-                while askanswered == False:
+                while True:
                     askans = input("Ask to update next time?(y/n) ")
                     if askans == "y":
                         print("Ok, will ask again next time.")
@@ -67,7 +65,7 @@ def update():
                         writetojson = {'savedir':savedir,'asktozip':asktozip, 'askupdate':askupdate}
                         with open(configfile, 'w') as f:
                             json.dump(writetojson, f, indent=2)
-                        askanswered = True
+                        break
                     elif askans == "n":
                         print("Ok, won't ask next time.")
                         with open(configfile) as f:
@@ -78,8 +76,8 @@ def update():
                         writetojson = {'savedir':savedir,'asktozip':asktozip, 'askupdate':askupdate}
                         with open(configfile, 'w') as f:
                             json.dump(writetojson, f, indent=2)
-                        askanswered = True
-                answered = True
+                        break
+                break
     else:
         print("No updates available.")   
 
@@ -100,42 +98,38 @@ def setup():
         os.remove(configfile)
     savedir = input("Where should I save the nekos? ")
     print("Saving to "+savedir)
-    asked = False
-    while asked == False:
+    while True:
         asktozip = input("Should I ask you to zip the files at the end?(y/n) ")
         if asktozip == "y":
             print("Will ask to zip later :)")
-            asked = True
+            break
         elif asktozip == "n":
             print("Will never ask to zip again :(")
-            asked = True
-    asked = False
-    while asked == False:
+            break
+    while True:
         askupdate = input("Should I ask to update, if there's an update, when the script is run?(y/n) ")
         if askupdate == "y":
             print("Will ask to update")
-            asked = True
+            break
         elif askupdate == "n":
             print("Will never ask to update again")
-            asked = True
-    asked = False
-    while asked == False:
+            break
+    while True:
         defaultsfw = input("What is your preferred default sfw status?(s/n/g) ")
         if defaultsfw == "s":
             print("Will default to sfw.")
-            asked = True
+            break
         elif defaultsfw == "n":
             print("Will default to nsfw.")
-            asked = True
+            break
         elif defaultsfw == "g":
             print("Will default to gif.")
-            asked = True
-    asked = False
-    while asked == False:
+            break
+    while True:
         defaultamount = int(input("What is your preferred default image count? "))
         if defaultamount != None:
             print("Will default to "+str(defaultamount)+" images")
-            asked = True
+            break
     writetojson = {'savedir':savedir,'asktozip':asktozip, 'askupdate':askupdate, 'sfw':defaultsfw, 'amount':defaultamount}
     with open(configfile, 'w') as f:
         json.dump(writetojson, f, indent=2)
@@ -149,20 +143,18 @@ configfile = os.path.join(configdir, "config.json")
 if os.path.exists("config.json"):
     os.rename("config.json", configfile)
 if not os.path.exists(configfile):
-    askedsetup = False
-    while askedsetup == False:
+    while True:
         createsetup = input("Want to create a config (this appears on first time run)?(y/n) ")
         if createsetup == "y":
-            askedsetup = True
             print("Starting setup")
             setup()
+            break
         elif createsetup == "n":
             print("It's important to create a config file. Please rethink your decision")
 
 #Config parser
 with open(configfile) as config:
-    works = False
-    while works == False:
+    while True:
         data = json.load(config)
         try:
             zip = data['asktozip']
@@ -176,7 +168,7 @@ with open(configfile) as config:
             elif defaulttype == "g":
                 imgtype == "gif"
             amount = data['amount']
-            works = True
+            break
         except Exception:
             print("Config is outdated, starting configuration.")
             config.close()
@@ -282,10 +274,10 @@ if imgtype != None:
                 break
             randapiurl = random.choice(apiurl)
             apiworks = False
-            while apiworks == False:
+            while True:
                 try:
                     randapicontent = requests.get(randapiurl)
-                    apiworks = True
+                    break
                 except Exception:
                     randapiurl = random.choice(apiurl)
             data = json.loads(randapicontent.content)
@@ -426,7 +418,7 @@ def zipdir(path, ziph):
 #Ask to zip
 zipped = False
 if zip == "y" and imgtype != None:
-    while zipped == False: 
+    while True: 
         prompt = input("Zip up files?(y/n) ")
         if prompt == "y":
             print("Zipping files...")
@@ -434,10 +426,10 @@ if zip == "y" and imgtype != None:
             zipdir(dir, zipf)
             zipf.close()
             print("Zip created at \033[0;36m"+os.getcwd()+"\033[0m with filename \033[0;36mnekos.zip\033[0m")
-            zipped = True
+            break
         elif prompt == "n":
             print("Alright, won't zip files")
-            zipped = True
+            break
 
 #Update
 if chkupd == "y" and updated == False:
