@@ -1,7 +1,7 @@
 import os
 if os.path.exists("nekodl.py"):
     os.remove("nekodl.py")
-os.system("curl -O https://raw.githubusercontent.com/justanobody2107/public-projects/main/nekodl.py")
+os.system("curl -O https://raw.githubusercontent.com/justanobody2107/public-projects/main/nekodl/nekodl.py")
 if os.path.exists("nekodl.py"):
     os.remove("install.py")
 else:
