@@ -1,5 +1,5 @@
 # Public Projects by JustANobody2107
-Totally not a ~~useless~~ repo with good things maybe. Neko's all the way.
+Totally not a ~~useless~~ repo with good things maybe. Nekos all the way.
 
 ## What's here?
 
