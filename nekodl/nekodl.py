@@ -22,13 +22,13 @@ except Exception:
 imgtype = "sfw"
 amount = 1
 apiurl = ["https://nekos.life/api/v2/img/neko"]
-version = "v1.2.5"
+version = "v1.2.6"
 updated = False
 
 #Update checker
 def update():
     print("Checking for updates...")
-    newversion = str(requests.get("https://raw.githubusercontent.com/justanobody2107/public-projects/main/latestversion.txt").content)
+    newversion = str(requests.get("https://raw.githubusercontent.com/justanobody2107/public-projects/main/nekodl/config/latestversion.txt").content)
     newver = [int(newver) for newver in re.findall(r'\d+', newversion)]
     oldver = re.sub('v', "", version)
     num1 = int(oldver.split('.')[0])
@@ -42,7 +42,7 @@ def update():
             updateans = input("Update found! Do you want to update?(y/n) ")
             if updateans == "y":
                 print("Updating...")
-                os.system("curl -so update.py https://raw.githubusercontent.com/justanobody2107/public-projects/main/nekodl.py")
+                os.system("curl -so update.py https://raw.githubusercontent.com/justanobody2107/public-projects/main/nekodl/nekodl.py")
                 if os.path.exists("update.py"):
                     os.remove("nekodl.py")
                     os.rename("update.py", "nekodl.py")
@@ -84,7 +84,7 @@ def update():
 #Reinstall (will only run when --reinstall tag attached)
 def reinstall():
     print("Reinstalling")
-    os.system("curl -so update.py https://raw.githubusercontent.com/justanobody2107/public-projects/main/nekodl.py")
+    os.system("curl -so update.py https://raw.githubusercontent.com/justanobody2107/public-projects/main/nekodl/nekodl.py")
     if os.path.exists("update.py"):
         os.remove("nekodl.py")
         os.rename("update.py", "nekodl.py")
