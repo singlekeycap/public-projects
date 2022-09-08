@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Suggest an idea for this project
+about: Report bugs found within any of the software in this repo
 title: '[Bug]: Issue'
 labels: 'bug'
 assignees: 'justanobody2107'
